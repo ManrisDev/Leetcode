@@ -2,61 +2,14 @@
 {
     internal class Solution
     {
-        public ListNode AddTwoNumbers(ListNode l1, ListNode l2)
+        public ListNode AddTwoNumbers(ListNode l1, ListNode l2, int carry = 0)
         {
-            ListNode currentL1Node = l1;
-            ListNode currentL2Node = l2;
+            if (l1 == null && l2 == null && carry == 0) return null;
 
-            List<int> digits = [];
-            int sum;
-            int integer = 0;
-            int residue = 0;
+            int total = (l1?.val ?? 0) + (l2?.val ?? 0) + carry;
+            carry = total / 10;
 
-            while (currentL1Node != null && currentL2Node != null)
-            {
-                sum = currentL1Node.val + currentL2Node.val + integer;
-                residue = sum % 10;
-                integer = sum / 10;
-
-                digits.Add(residue);
-
-                currentL1Node = currentL1Node.next;
-                currentL2Node = currentL2Node.next;
-            }
-
-            if (currentL1Node == null)
-            {
-                while (currentL2Node != null)
-                {
-                    sum = currentL2Node.val + integer;
-                    residue = sum % 10;
-                    integer = sum / 10;
-
-                    digits.Add(residue);
-
-                    currentL2Node = currentL2Node.next;
-                }
-            }
-            else if (currentL2Node == null)
-            {
-                while (currentL1Node != null)
-                {
-                    sum = currentL1Node.val + integer;
-                    residue = sum % 10;
-                    integer = sum / 10;
-
-                    digits.Add(residue);
-
-                    currentL1Node = currentL1Node.next;
-                }
-            }
-            if (integer != 0)
-                digits.Add(integer);
-
-            foreach (var i in digits)
-                Console.Write(i);
-
-            return CreateLinkedList([..digits]);
+            return new(total % 10, AddTwoNumbers(l1?.next, l2?.next, carry));
         }
 
         public ListNode CreateLinkedList(int[] values)
